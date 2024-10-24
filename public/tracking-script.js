@@ -8,7 +8,7 @@
     const params = new URLSearchParams(queryString)
     const source = params.get("utm")
 
-    const endpoint = "http://localhost:3000/api/track"
+    const endpoint = "https://analytics-chi-murex.vercel.app/api/track"
 
     function generateSessionId() {
         return "session-" + Math.random().toString(36).substring(2, 9)

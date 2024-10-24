@@ -3,7 +3,7 @@ import hljs from "highlight.js";
 import "highlight.js/styles/sunburst.css"; // Choose the theme you like
 
 const CodeComp = () => {
-    const codeString = `"http://localhost:3000/api/events";
+    const codeString = `"https://analytics-chi-murex.vercel.app/api/events";
   const headers = {
       "Content-Type": "application/json",
       Authorization: "Bearer {{apiKey}}",
