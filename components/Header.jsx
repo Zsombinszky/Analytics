@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from "next/link";
+import Image from "next/image"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -46,8 +47,8 @@ const Header = () => {
                         className="text-white outline-none p-0 m-0 border-none">
                         <div className="flex space-x-2 items-center justify-center hover:opacity-50">
                             <p className="text-sm">{user && user?.user_metadata.full_name.split(" ")[0]}</p>
-                            <img className="h-8 w-8 rounded-full" src={user && user?.user_metadata.avatar_url}
-                                 alt={"user profile picture"}/>
+                            <Image className="h-8 w-8 rounded-full" src={user && user?.user_metadata.avatar_url}
+                                   alt={"user profile picture"} width={32} height={32}/>
                         </div>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent

@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import useUser from "@/hooks/useUser";
 import {redirect} from "next/navigation";
 import Header from "@/components/Header";
@@ -19,7 +19,7 @@ const SettingsPage = () => {
     }, [user]);
 
     //Fetch the users API key
-    const getUserAPI = async () => {
+    const getUserAPI = useCallback(async () => {
         setLoading(true)
         setError(null)
         try {
@@ -33,7 +33,7 @@ const SettingsPage = () => {
         } finally {
             setLoading(false)
         }
-    }
+    },[user.id])
 
     //Generate a new API key
     const generateApiKey = async () => {
@@ -65,9 +65,10 @@ const SettingsPage = () => {
     // Fetch users API key on component mount
     useEffect(() => {
         if (user && supabase) {
-            getUserAPI()
+            getUserAPI().then(() => {
+            })
         }
-    }, [user]);
+    }, [getUserAPI, user]);
 
 
     //redirecting view

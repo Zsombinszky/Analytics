@@ -1,5 +1,5 @@
 'use client';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import Link from "next/link";
 import Header from "@/components/Header";
 import useUser from "@/hooks/useUser";
@@ -18,7 +18,7 @@ const DashboardPage = () => {
         if (user === "no user") redirect("/signin");
     }, [user]);
 
-    const fetchWebsites = async () => {
+    const fetchWebsites = useCallback(async () => {
         setLoading(true);
         setError(null);
         try {
@@ -35,12 +35,13 @@ const DashboardPage = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [user]);
 
     useEffect(() => {
         if (!user || !supabase) return;
-        fetchWebsites();
-    }, [user]);
+        fetchWebsites().then(() => {
+        })
+    }, [fetchWebsites, user]);
 
     return (
         <div className="w-full min-h-screen bg-black flex flex-col justify-center items-center">

@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import Header from "@/components/Header";
 import useUser from "@/hooks/useUser";
 import {redirect, useParams} from "next/navigation";
@@ -34,10 +34,11 @@ const WebsitePage = () => {
             setTimeout(fetchViews, 500)
         }
 
-        validateUserAndFetchData();
-    }, [user, website]);
+        validateUserAndFetchData().then(() => {
+        });
+    }, [fetchViews, user, website]);
 
-    const fetchViews = async () => {
+    const fetchViews = useCallback(async () => {
         setLoading(true)
         try {
             const [viewsResponse, visitsResponse] = await Promise.all([
@@ -53,7 +54,7 @@ const WebsitePage = () => {
         } finally {
             setLoading(false)
         }
-    };
+    }, [website]);
 
     const groupPageViews = (pageViews) => {
         const groupedPageViews = {}

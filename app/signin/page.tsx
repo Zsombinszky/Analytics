@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useEffect} from 'react'
+import React, {useCallback, useEffect} from 'react'
 import {supabase} from "@/config/Supabase_Client";
 import {useRouter} from "next/navigation";
 
@@ -19,7 +19,7 @@ const SignInPage = () => {
     }
 
     // Check if user already authenticated
-    const checkUserAuthStatus = async () => {
+    const checkUserAuthStatus = useCallback(async () => {
         try {
             const {data: {user}} = await supabase.auth.getUser();
             if (user && user.role === 'authenticated') {
@@ -28,13 +28,14 @@ const SignInPage = () => {
         } catch (error) {
             console.error("Error fetching user:", error.message)
         }
-    };
+    }, [router]);
 
     useEffect(() => {
         if (supabase) {
-            checkUserAuthStatus()
+            checkUserAuthStatus().then(() => {
+            })
         }
-    }, []);
+    }, [checkUserAuthStatus]);
 
     return (
         <div className="bg-black items-center justify-center flex w-full min-h-screen">
