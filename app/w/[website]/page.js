@@ -14,8 +14,11 @@ const WebsitePage = () => {
     const [user] = useUser()
     const {website} = useParams()
     const [pageViews, setPageViews] = useState([])
+    const [customEvents, setCustomEvents] = useState([])
     const [totalVisits, setTotalVisits] = useState([])
     const [groupedPageViews, setGroupedPageViews] = useState([])
+    const [groupedPageSources, setGroupedPageSources] = useState([])
+    const [groupedCustomEvents, setGroupedCustomEvents] = useState([])
 
     useEffect(() => {
         const validateUserAndFetchData = async () => {
@@ -41,20 +44,28 @@ const WebsitePage = () => {
     const fetchViews = useCallback(async () => {
         setLoading(true)
         try {
-            const [viewsResponse, visitsResponse] = await Promise.all([
+            const [viewsResponse, visitsResponse, customEventsResponse] = await Promise.all([
                 supabase.from("page_views").select().eq("domain", website),
                 supabase.from("visits").select().eq("website_id", website),
+                supabase.from("events").select().eq("website_id", website),
             ])
 
             setPageViews(viewsResponse.data || []);
             setTotalVisits(visitsResponse.data || []);
+            setCustomEvents(customEventsResponse.data || []);
             setGroupedPageViews(groupPageViews(viewsResponse.data || []));
+            setGroupedCustomEvents(
+                customEvents.reduce((acc, event) => {
+                    acc[event.event_name] = (acc[event.event_name] || 0) + 1;
+                    return acc;
+                }, {})
+            );
         } catch (error) {
             console.error("Error fetching views:", error)
         } finally {
             setLoading(false)
         }
-    }, [website]);
+    }, [customEvents, website]);
 
     const groupPageViews = (pageViews) => {
         const groupedPageViews = {}
@@ -85,6 +96,8 @@ const WebsitePage = () => {
                     totalVisits={totalVisits}
                     pageViews={pageViews}
                     groupedPageViews={groupedPageViews}
+                    groupedPageSources={groupedPageSources}
+                    customEvents={customEvents}
                 />
             )}
         </div>

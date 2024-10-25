@@ -1,10 +1,10 @@
 import {abbreviateNumber} from "@/lib/utils";
 
-export const ViewDetails = ({groupedPageViews}) => (
+export const ViewDetails = ({groupedPageViews, groupedPageSources}) => (
     <div
         className="items-center justify-center grid grid-cols-1 bg-black lg:grid-cols-2 mt-12 w-full border-y border-white/5">
         <TopPages groupedPageViews={groupedPageViews}/>
-        <TopVisitSources/>
+        <TopVisitSources groupedCustomEvents={groupedPageSources}/>
     </div>
 );
 
@@ -21,7 +21,7 @@ const TopPages = ({groupedPageViews}) => (
     </div>
 );
 
-const TopVisitSources = () => (
+const TopVisitSources = ({groupedPageSources}) => (
     <div className="flex flex-col bg-black z-40 h-full w-full lg:border-l border-t lg:border-t-0 border-white/5">
         <h1 className="label relative">
             Top Visit Sources
@@ -29,20 +29,20 @@ const TopVisitSources = () => (
                 add ?utm={"{source}"} to track
             </p>
         </h1>
-        {/*{groupedPageSources.map((pageSource) => (*/}
-        {/*    <div*/}
-        {/*        key={pageSource}*/}
-        {/*        className="text-white w-full items-center justify-between px-6 py-4 border-b border-white/5 flex"*/}
-        {/*    >*/}
-        {/*        <p className="text-white/70 font-light">*/}
-        {/*            /{pageSource.source}*/}
-        {/*        </p>*/}
-        {/*        <p className="text-white/70 font-light">*/}
-        {/*            <p className="">*/}
-        {/*                {abbreviateNumber(pageSource.visits)}*/}
-        {/*            </p>*/}
-        {/*        </p>*/}
-        {/*    </div>*/}
-        {/*))}*/}
+        {groupedPageSources.map((pageSource) => (
+            <div
+                key={pageSource}
+                className="text-white w-full items-center justify-between px-6 py-4 border-b border-white/5 flex"
+            >
+                <p className="text-white/70 font-light">
+                    /{pageSource.source}
+                </p>
+                <p className="text-white/70 font-light">
+                    <p className="">
+                        {abbreviateNumber(pageSource.visits)}
+                    </p>
+                </p>
+            </div>
+        ))}
     </div>
 );
